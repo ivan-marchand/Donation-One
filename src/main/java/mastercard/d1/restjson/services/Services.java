@@ -1,7 +1,10 @@
 package mastercard.d1.restjson.services;
 
+import java.util.Vector;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -10,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+
+import mastercard.d1.business.Charity;
 
 import org.apache.log4j.Logger;
 
@@ -28,10 +33,10 @@ public class Services {
 		
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/simpleArg/{path}")
-	public String[] simpleArg( @Context SecurityContext sc, @PathParam("path") String iPath  ) {
-		LOGGER.info("Executing simple code with argument :"+iPath);
-		return new String[]{"This is a test"};
+	@Path("/getCharityList")
+	public Vector<Charity> getCharityList( @Context SecurityContext sc, @HeaderParam("category") String iCategory, @HeaderParam("zipcode") String iZipCode) {
+		LOGGER.info("Request charity from category:"+iCategory+" "+iZipCode);
+		return Charity.retrieveCharityByCategoryAndZipcode(iCategory, iZipCode);
 	}
 	
 	@POST

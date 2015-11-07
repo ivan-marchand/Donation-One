@@ -14,7 +14,7 @@
    	<init-param>
 	    <param-name>jersey.config.server.provider.packages</param-name>
 	    <param-value>
-	        servlet.WEB-INF.classes.generic.ws.restjson.services
+	        servlet.WEB-INF.classes.mastercard.d1.restjson.services
 	    </param-value>
 	</init-param>
    	

@@ -40,9 +40,9 @@ public class SqliteDBConnect {
 		      Statement statement = connection.createStatement();
 		      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	
-		      statement.executeUpdate("create table categories if not exists (id INTEGER PRIMARY KEY, val string) ");
-		      statement.executeUpdate("create table charities if not exists(id INTEGER PRIMARY KEY, name string, logopath string, privatekey string, publickey string)");
-		      statement.executeUpdate("create table charities_cat_lists if not exists (id_ch INTEGER, id_cat INTEGER)");
+		      statement.executeUpdate("create table if not exists categories (id INTEGER PRIMARY KEY, val string) ");
+		      statement.executeUpdate("create table if not exists charities (id INTEGER PRIMARY KEY, name string, logopath string, privatekey string, publickey string)");
+		      statement.executeUpdate("create table if not exists charities_cat_lists (id_ch INTEGER, id_cat INTEGER)");
 		      
 		      statement.close();
 		      

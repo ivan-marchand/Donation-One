@@ -14,6 +14,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 
+import mastercard.d1.business.Category;
 import mastercard.d1.business.Charity;
 
 import org.apache.log4j.Logger;
@@ -29,6 +30,13 @@ public class Services {
 	public String[] simple( @Context SecurityContext sc ) {
 		LOGGER.info("Returning result ...");
 		return new String[]{"This is a test"};
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getCategoryList")
+	public Category[] getCategoryList( @Context SecurityContext sc) {
+		return Category.returnCategoryList();
 	}
 		
 	@GET

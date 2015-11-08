@@ -101,6 +101,8 @@ public class Charity {
 	
 	public static Vector<Charity> searchCharity(String iText){
 		
+		return searchCharityByWord(iText.trim());
+		/*
 		Vector<Charity> charities = new Vector<Charity>();
 		
 		String[] words = iText.split(" ");
@@ -109,7 +111,7 @@ public class Charity {
 			charities.addAll(searchCharityByWord(word));
 		}
 		
-		return charities;
+		return charities;*/
 	}
 	
 	public static Charity retrieveCharityById(Integer iId){

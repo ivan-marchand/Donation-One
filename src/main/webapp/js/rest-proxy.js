@@ -60,6 +60,16 @@ function RetrieveUser(callback, email, context) {
 
 };
 
+function GetTrxList(callback, context) {
+	$.ajax(SERVER_URL + URL_BASE + "/getTrxList", {
+		dataType : 'jsonp',
+		success : function(data) {
+			callback(data, context);
+		}
+	});
+
+};
+
 function ProcessPayment(data, context) {
 	$.ajax(SERVER_URL + URL_BASE + "/processPayment", {
 		type : "POST",

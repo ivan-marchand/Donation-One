@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<meta charset="utf-8">
+
+<title>CharitEasy - You make the difference, we make it easy!</title>
+
+<link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="./bootstrap/css/bootstrap-dialog.min.css" rel="stylesheet">
+
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/underscore-min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/rest-proxy.js"></script>
+<script src="js/dashboard.js"></script>
+
+<!-- Category list side bar template -->
+<script type="text/template" id="trx_list_template">
+	<tr>
+		<th><h1>Date/Time</h1></th>
+		<th><h1>User</h1></th>
+		<th><h1>Amount</h1></th>
+		<th><h1>Charity</h1></th>
+	</tr>
+	<% list.forEach(function (trx) { %>
+	<tr>
+		<td><h1><%= trx.timestamp %></h1></td>
+		<td><h1><%= trx.user %></h1></td>
+		<td><h1><%= trx.amount %>$</h1></td>
+		<td><h1><%= trx.charity %></h1></td>
+	</tr>
+	<% }); %>
+</script>
+
+
+</head>
+<body>
+
+	<!-- Static navbar -->
+	<div class="navbar navbar-default navbar-static-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#"><img src="static/logo.svg"
+					height="50px" /></a> <a class="navbar-brand" href="#">CharitEasy</a>
+				<p class="navbar-text">You make the difference, we make it easy!</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+	<table class="table table-striped">
+		<tbody id="trx_list"></tbody>
+	</table>
+	</div>
+
+
+</body>
+</html>

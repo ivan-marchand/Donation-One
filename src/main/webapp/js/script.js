@@ -247,6 +247,9 @@ $(function() {
         cardExpiryYear: $("#exp_year").val(),
         cardCvc: $("#cvc").val()
     	};
+    	if ($user.email) {
+    		data["email"] = $user.email;
+    	}
     	ProcessPayment(data, {});
     });
     

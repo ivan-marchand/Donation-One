@@ -16,11 +16,6 @@ import java.net.URL;
 public class RestClient {
     private String mServerHost = "45.33.81.168";
     private String mServerPort = "10110";
-    private JSONObject mJsonPost;
-
-    public RestClient(JSONObject jsonObject) {
-        mJsonPost = jsonObject;
-    }
 
     public RestClient() {
     }

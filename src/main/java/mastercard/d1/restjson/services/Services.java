@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
@@ -42,7 +43,7 @@ public class Services {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getCharityList")
-	public Vector<Charity> getCharityList( @Context SecurityContext sc, @HeaderParam("category") String iCategory, @HeaderParam("zipcode") String iZipCode) {
+	public Vector<Charity> getCharityList( @Context SecurityContext sc, @QueryParam("category") String iCategory, @QueryParam("zipcode") String iZipCode) {
 		LOGGER.info("Request charity from category:"+iCategory+" "+iZipCode);
 		return Charity.retrieveCharityByCategoryAndZipcode(iCategory, iZipCode);
 	}

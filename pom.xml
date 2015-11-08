@@ -91,6 +91,7 @@
 										<include name="js/**/*" />
 										<include name="html/**/*" />
 										<include name="css/**/*" />
+										<include name="static/**/*" />
 										<include name="bootstrap/**/*" />
 										<include name="leaflet-0.7.3/**/*" />
 										<include name="*.jsp" />
@@ -109,6 +110,8 @@
 									dir="${project.build.directory}/${project.artifactId}-${project.version}/html/" />
 								<delete
 									dir="${project.build.directory}/${project.artifactId}-${project.version}/css/" />
+								<delete
+									dir="${project.build.directory}/${project.artifactId}-${project.version}/static/" />
 								<delete
 									dir="${project.build.directory}/${project.artifactId}-${project.version}/bootstrap/" />
 

@@ -1,5 +1,8 @@
 package mastercard.d1.business;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.simplify.payments.*;
 import com.simplify.payments.exception.ApiCommunicationException;
 import com.simplify.payments.exception.AuthenticationException;
@@ -15,6 +18,7 @@ public class Payment {
 	String cardExpiryMonth;
 	String cardExpiryYear;
 	String cardCvc;
+	String email;
 	
 	public static Result processPayment(Payment iPayment){
 
@@ -46,6 +50,22 @@ public class Payment {
 		
 			if ("APPROVED".equals(payment.get("paymentStatus"))) {
 				aResult.result = "OK";
+				
+				History hist = new History();
+				
+				if (iPayment.email == null || iPayment.email == "")
+					hist.id_user = -1;
+				else {
+					User aUser = User.retrieveUser(iPayment.email);
+					hist.id_user = aUser.id;
+				}
+				    hist.amount = iPayment.amount;
+				    hist.id_ch = charity.id;
+					hist.dateTime =new SimpleDateFormat().format(new Date());
+					
+					History.createRecord(hist);
+			
+				
 			}
 			
 		} catch (ApiCommunicationException e) {
@@ -76,15 +96,21 @@ public class Payment {
 		aPayment.cardExpiryMonth = aUser.expiry_month;
 		aPayment.cardExpiryYear = aUser.expiry_year;
 		aPayment.cardCvc = aUser.cvc;
+		aPayment.email = iEmail;
 
 		//Get only first charity
-		aPayment.id = String.valueOf(aUser.links.entrySet().iterator().next().getValue().id_charity);
+		int id_ch = aUser.links.entrySet().iterator().next().getValue().id_charity;
+		aPayment.id = String.valueOf(id_ch);
 		if (iAmount == null || iAmount == "")
 			aPayment.amount = String.valueOf(aUser.links.entrySet().iterator().next().getValue().oneclick);
+			
 		else
 			aPayment.amount = iAmount;
-
-		return processPayment(aPayment);
-
+		
+		aResult = processPayment(aPayment);
+		
+		
+		return aResult;
+		
 	}
 }

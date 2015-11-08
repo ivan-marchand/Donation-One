@@ -16,6 +16,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import mastercard.d1.business.Category;
 import mastercard.d1.business.Charity;
+import mastercard.d1.business.History;
 import mastercard.d1.business.Payment;
 import mastercard.d1.business.Result;
 import mastercard.d1.business.User;
@@ -100,6 +101,14 @@ public class Services {
 	public Result oneClickPayment( @Context SecurityContext sc, @QueryParam("email") String iEmail, @QueryParam("amount") String iAmount) {
 		LOGGER.info("One Click Payment for user "+iEmail+" ...");
 		return Payment.oneClickPayment(iEmail, iAmount);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getTransactionList")
+	public Vector<History> getTransactionList( @Context SecurityContext sc) {
+		LOGGER.info("Get Transaction List ...");
+		return History.getTransactionList();
 	}
 	
 	@POST

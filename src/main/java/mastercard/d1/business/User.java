@@ -78,6 +78,57 @@ public class User {
 		
 	}
 	
+	
+	public static User retrieveUser(Integer id){
+		
+		User result = null;
+		
+		Connection con = SqliteDBConnect.getUserConnection();
+		
+		PreparedStatement stmt = null;
+	    String query = "select id, name, email, ccn , expiry_month , expiry_year , cvc, zipcode  " +
+	                   "from users where email = ?";
+	    try {
+	        stmt = con.prepareStatement(query);
+	        stmt.setInt(1, id);
+	        
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	        	
+	        	result = new User();
+	        	
+	        	result.id = rs.getInt("id");
+	        	result.name = rs.getString("name");
+	        	result.email = rs.getString("email");
+	        	result.ccn = rs.getString("ccn");
+	        	result.expiry_month = rs.getString("expiry_month");
+	        	result.expiry_year = rs.getString("expiry_year");
+	        	result.cvc = rs.getString("cvc");
+	        	result.zipcode = rs.getString("zipcode");
+	        	
+	        }
+	    } catch (SQLException e ) {
+	        System.err.println(e);
+	    } finally {
+	        if (stmt != null) { try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} }
+	    }
+	    
+	    if (result!=null) {
+	    	retrieveCharityListForUser(result);
+	    
+	    	retrieveCharityFromLinks(result.links);
+	    }		
+	    
+		return result;		
+		
+	}
+	
+	
 	public static HashMap<Integer, Link> retrieveCharityListForUser(User user){
 		
 		HashMap<Integer,Link> links = new HashMap<Integer,Link>();

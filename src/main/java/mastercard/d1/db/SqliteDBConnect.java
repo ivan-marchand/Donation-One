@@ -104,4 +104,44 @@ public class SqliteDBConnect {
 		
 	}
 	
+	
+	public static Connection historyconnection;
+	
+	public static Connection getHistoryConnection(){
+		
+		final String localdir = System.getProperty("user.dir");
+		//LOGGER.debug("Attaching server to DB file:"+localdir);
+		
+		if (historyconnection==null) {
+		    try
+		    {
+		      // create a database connection
+		    	historyconnection = DriverManager.getConnection("jdbc:sqlite:"+localdir+File.separator+".."+File.separator+"mastercard_history.sqlite");
+		      
+		      Statement statement = historyconnection.createStatement();
+		      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	
+		      statement.executeUpdate("create table if not exists history (id INTEGER PRIMARY KEY, id_user INTEGER, id_ch INTEGER, amount TEXT, dateTime TEXT) ");
+		      // statement.executeUpdate("create table if not exists charitas (id_user INTEGER, id_ch INTEGER,  amount REAL, oneclick REAL)");
+		      
+		      statement.close();
+		      
+		      historyconnection.commit();
+		      
+		    }
+		    catch(SQLException e)
+		    {
+		      // if the error message is "out of memory", 
+		      // it probably means no database file is found
+		      System.err.println(e.getMessage());
+		    }
+		    finally
+		    {
+		       
+		    }
+		}
+	    
+	    return historyconnection;
+		
+	}
 }

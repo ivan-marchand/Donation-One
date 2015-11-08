@@ -16,8 +16,11 @@ public class Payment {
 	String cardExpiryYear;
 	String cardCvc;
 	
-	public static String processPayment(Payment iPayment){
+	public static Result processPayment(Payment iPayment){
 
+		Result aResult = new Result();
+		aResult.result = "KO";
+		
 		Charity charity = Charity.retrieveCharityById(Integer.parseInt(iPayment.id));
 		
 		PaymentsApi.PUBLIC_KEY = charity.public_key;
@@ -42,29 +45,23 @@ public class Payment {
 											.set("description", "Payment to "+charity.name));
 		
 			if ("APPROVED".equals(payment.get("paymentStatus"))) {
-			return "OK";
-			}
-			else {
-				return "KO";
+				aResult.result = "OK";
 			}
 			
 		} catch (ApiCommunicationException e) {
 			e.printStackTrace();
-			return "KO";
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
-			return "KO";
 		} catch (InvalidRequestException e) {
 			e.printStackTrace();
-			return "KO";
 		} catch (NotAllowedException e) {
 			e.printStackTrace();
-			return "KO";
 		} catch (SystemException e) {
 			e.printStackTrace();
-			return "KO";
 		}
-		    
+		
+		return aResult;
+
 	}
     
 }

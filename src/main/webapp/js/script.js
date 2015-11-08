@@ -68,11 +68,39 @@ function DisplayCharityList(charityList, context) {
 
     // Register donate button
     $(".donate_button").on("click", function() {
-    	$("#modal_charity_name").html($(this).attr("charity_name"));
-    	$("#payment_button").attr("charity_id", $(this).attr("charity_id"));
-    	$("#payment_modal").modal();
+    	OpenDonateDialog($(this));
     });
 };
+
+// Open payment dialog box
+function OpenDonateDialog(btn) {
+	$("#modal_charity_name").html(btn.attr("charity_name"));
+	var $charityId = btn.attr("charity_id");
+	$("#payment_button").attr("charity_id", $charityId);
+	
+	// Logged in ?
+	$("#cvc").val("");
+	if (!_.isEmpty($user)) {
+		console.log($user);
+		$("#ccn").val($user.ccn);
+		$("#exp_month").val($user.expiry_month);
+		$("#exp_year").val($user.expiry_year);
+		// Default amount defined ?
+		if ($charityId in $user.links) {
+			$("#donation_amount").val($user.links[$charityId].amount);
+		} else {
+			$("#donation_amount").val("");
+		}
+	} else {
+		$("#ccn").val("");
+		$("#exp_month").val("");
+		$("#exp_year").val("");
+		$("#donation_amount").val("");
+	}
+
+	// Show dialog
+	$("#payment_modal").modal();
+}
 
 // Display all charity with category selected by default
 function DisplayFullCharityList() {
@@ -84,17 +112,27 @@ function DisplayFullCharityList() {
 }
 
 // Display search result
-function DisplaySearchResult(data) {
+function DisplaySearchResult(data, use_location, context) {
 	$charityMap = {};
-	$charityMap["Search Result"] = data;
+	if (use_location) {
+		var $charityList = [];
+		for (var i in data) {
+			var item = data[i];
+			console.log(item);
+			var $charity = item.charity;
+			$charity["address"] = item.address;
+			$charityList.push($charity);
+		}
+		$charityMap["Search Result"] = $charityList;
+	} else {
+		$charityMap["Search Result"] = data;
+	}
 	$("#charity_list").empty();
 	UpdateCharityListDisplay("Search Result", true);
 
     // Register donate button
     $(".donate_button").on("click", function() {
-    	$("#modal_charity_name").html($(this).attr("charity_name"));
-    	$("#payment_button").attr("charity_id", $(this).attr("charity_id"));
-    	$("#payment_modal").modal();
+    	OpenDonateDialog($(this));
     });
 }
 
@@ -122,6 +160,9 @@ function Login(data) {
 		$("#logged_out").hide();
 		$("#user_name").html($user.name);
 		$.cookie("email", $user.email);
+		
+		// Update Zip code search box
+		$("#zip_code").val($user.zipcode);
 	} else {
 		DisplayFailureDialog("Login failed, please try again");
 	}
@@ -149,7 +190,7 @@ $(function() {
     });
     // Already logged in ?
     if ($.cookie("email") && _.isEmpty($user)) {
-    	RetrieveUser(Login, $("#email_address").val(), {});
+    	RetrieveUser(Login, $.cookie("email"), {});
     }
     
     // Logout
@@ -161,17 +202,41 @@ $(function() {
     	$user = {};
     });
 
+    // User profile
+    $("#user_name").on("click", function() {
+    	// Email / Zip code
+    	$("#user_email").val($user.email);
+    	$("#user_zip_code").val($user.zipcode);
+    	
+    	// display charity preferences
+    	console.log($user);
+    	$("#charity_pref_table").html(_.template($("#charity_pref_template").html())({links: $user.links}));
+    	$("#user_profile_modal").modal();
+    });
+
     // Search
     $("#charity_search").val("");
+    $("#zip_code").val("");
     $("#charity_search_button").on("click", function() {
-    	SearchCharity(DisplaySearchResult, $("#charity_search").val(), {});
+    	SearchCharity(DisplaySearchResult, {text: $("#charity_search").val()}, {});
     });
     $("#charity_search").on("keydown", function(e) {
     	if(e.which == 13) {
-    		SearchCharity(DisplaySearchResult, $("#charity_search").val(), {});
+    		SearchCharity(DisplaySearchResult, {text: $("#charity_search").val()}, {});
     	}
     });
-    
+
+    $("#zip_code_button").on("click", function() {
+        $("#charity_search").val("");
+    	SearchCharityByZipCode(DisplaySearchResult, {zipcode: $("#zip_code").val()}, {});
+    });
+    $("#zip_code").on("keydown", function(e) {
+    	if(e.which == 13) {
+    	    $("#charity_search").val("");
+    		SearchCharityByZipCode(DisplaySearchResult, {zipcode: $("#zip_code").val()}, {});
+    	}
+    });
+
     // Payment
     $("#payment_button").on("click", function() {
     	data = {

@@ -18,6 +18,23 @@
 <script src="js/rest-proxy.js"></script>
 <script src="js/script.js"></script>
 
+
+<!-- Charity Preferences template -->
+<script type="text/template" id="charity_pref_template">
+	<tr>
+		<th>Name</th>
+		<th>Predefined Amount</th>
+		<th>One Click Amount</th>
+	</tr>
+	<% for( var id in links) { var charity = links[id] %>
+	<tr class="active">
+		<td class="active"><%= charity.charity.name %></td>
+		<td class="active"><input type="text" value="<%= charity.amount %>"></input></td>
+		<td class="active"><input type="text" value="<%= charity.oneclick %>"></input></td>
+	</tr>
+	<% } %>
+</script>
+
 <!-- Category list side bar template -->
 <script type="text/template" id="category_list_template">
 <ul class="nav nav-sidebar">
@@ -35,16 +52,22 @@
 			<h3 class="sub-header"><%= category %></h3>
 		</a>
 	<% } %>
-	<% list.forEach(function (chartity) { %>
+	<% list.forEach(function (charity) { %>
 	<div class="col-sm-3">
 		<div class="thumbnail">
-			<img src="<%= chartity.logoPath %>" height="200" width="200"></img>
+			<img src="<%= charity.logoPath %>" height="200" width="200"></img>
 			<div class="caption">
-				<h4><%= truncate(chartity.name, 24) %></h4>
-				<%= truncate(chartity.description, 88) %>
+				<h4><%= truncate(charity.name, 24) %></h4>
+				<%= truncate(charity.description, 88) %>
 				<p>
-					<a href="javascript:void(0)" class="btn btn-primary donate_button" role="button" charity_name="<%= chartity.name %>" charity_id="<%= chartity.id %>">Donate</a>
+					<a href="javascript:void(0)" class="btn btn-primary donate_button" role="button" charity_name="<%= charity.name %>" charity_id="<%= charity.id %>">Donate</a>
 				</p>
+				<% if (charity.address) { %>
+				<p>
+					<span class="glyphicon glyphicon-map-marker"></span>
+					<%= (charity.address) %>
+				</p>
+				<% } %>
 			</div>
 		</div>
 	</div>
@@ -70,8 +93,20 @@
 					<input type="text" class="form-control" placeholder="Search"
 						id="charity_search"></input> <span class="input-group-btn">
 						<button type="button" class="btn btn-default"
-							id="charity_search_button">
+							id="charity_search_button" title="Search">
 							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+				</div>
+			</form>
+
+			<form class="navbar-form navbar-left" role="search">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="Zip Code"
+						id="zip_code"></input> <span class="input-group-btn">
+						<button type="button" class="btn btn-default" id="zip_code_button"
+							title="Search Around Me">
+							<span class="glyphicon glyphicon-map-marker"></span>
 						</button>
 					</span>
 				</div>
@@ -79,7 +114,7 @@
 
 			<form class="navbar-form navbar-right">
 				<p class="navbar-text" id="logged_in" hidden>
-					Logged in as <span id="user_name"></span> - <a
+					Logged in as <a href="javascript:void(0)" id="user_name"></a> - <a
 						href="javascript:void(0)" id="logout">Logout</a>
 				</p>
 				<p class="navbar-text" id="logged_out">
@@ -139,18 +174,18 @@
 
 					<form class="form-inline">
 						<div class="form-group">
-							<label for="exp_month">Expiration Date</label> <select
-								class="form-control" name="exp_month" id="exp_month">
+							<label for="exp_month">Expiration Date</label>
+							<select	class="form-control" name="exp_month" id="exp_month">
 								<option>Month</option>
-								<option value="01">Jan (01)</option>
-								<option value="02">Feb (02)</option>
-								<option value="03">Mar (03)</option>
-								<option value="04">Apr (04)</option>
-								<option value="05">May (05)</option>
-								<option value="06">June (06)</option>
-								<option value="07">July (07)</option>
-								<option value="08">Aug (08)</option>
-								<option value="09">Sep (09)</option>
+								<option value="1">Jan (01)</option>
+								<option value="2">Feb (02)</option>
+								<option value="3">Mar (03)</option>
+								<option value="4">Apr (04)</option>
+								<option value="5">May (05)</option>
+								<option value="6">June (06)</option>
+								<option value="7">July (07)</option>
+								<option value="8">Aug (08)</option>
+								<option value="9">Sep (09)</option>
 								<option value="10">Oct (10)</option>
 								<option value="11">Nov (11)</option>
 								<option value="12">Dec (12)</option>
@@ -188,8 +223,8 @@
 	</div>
 
 	<!-- Modal for payment result -->
-	<div class="modal fade" id="dialog_modal" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal fade" id="dialog_modal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -237,7 +272,8 @@
 						<div class="input-group">
 							<span class="input-group-addon"><span
 								class="glyphicon glyphicon-lock"></span></span> <input type="password"
-								class="form-control" id="password" aria-label="" />
+								class="form-control" id="password" aria-label=""
+								value="123456789" />
 						</div>
 					</div>
 				</div>
@@ -248,5 +284,55 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Modal for User Profile -->
+	<div class="modal fade" id="user_profile_modal" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">User Profile</h4>
+				</div>
+				<div class="modal-body">
+
+					<!-- Email -->
+					<div class="form-group">
+						<label for="user_email">User Email</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span
+								class="glyphicon glyphicon-user"></span></span> <input type="text"
+								class="form-control" placeholder="user@example.com"
+								aria-label="user@example.com" id="user_email" />
+						</div>
+					</div>
+
+					<!-- Zip Code -->
+					<div class="form-group">
+						<label for="user_zip_code">Zip Code</label>
+						<div class="input-group">
+							<span class="input-group-addon"><span
+								class="glyphicon glyphicon-map-marker"></span></span> <input type="text"
+								class="form-control" placeholder="" aria-label=""
+								id="user_zip_code" />
+						</div>
+					</div>
+					
+					<!-- Charity preferences -->
+					<h4>Charity preferences</h4>
+					<table class="table" id="charity_pref_table">
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

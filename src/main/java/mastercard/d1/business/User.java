@@ -14,10 +14,10 @@ public class User {
 	int id;
 	String name;
 	String email;
-	transient String ccn;
-	transient String expiry_month;
-	transient String expiry_year;
-	transient String cvc;
+	String ccn;
+	String expiry_month;
+	String expiry_year;
+	String cvc;
 	String zipcode;
 	
 	public static class Link {

@@ -25,14 +25,23 @@ function GetCharityList(callback, context) {
 
 };
 
-function SearchCharity(callback, text, context) {
+function SearchCharity(callback, search, context) {
 	$.ajax(SERVER_URL + URL_BASE + "/searchCharity", {
-		data : {
-			text : text
-		},
+		data : search,
 		dataType : 'jsonp',
 		success : function(data) {
-			callback(data, context);
+			callback(data, false, context);
+		}
+	});
+
+};
+
+function SearchCharityByZipCode(callback, search, context) {
+	$.ajax(SERVER_URL + URL_BASE + "/placesRetrieve", {
+		data : search,
+		dataType : 'jsonp',
+		success : function(data) {
+			callback(data, true, context);
 		}
 	});
 

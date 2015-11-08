@@ -16,8 +16,8 @@ public class Charity {
 	String logoPath;
 	Vector<String> categories;
 	String description;
-	String public_key;
-	String private_key;
+	transient String public_key;
+	transient String private_key;
 	
 	public static Vector<Charity> retrieveAllCharities(){
 		
@@ -54,6 +54,48 @@ public class Charity {
 			} }
 	    }
 	    return charities;
+	}
+	
+	public static Charity retrieveCharityById(Integer iId){
+		
+		Charity charity = null;
+		
+		Connection con = SqliteDBConnect.getConnection();
+		
+		PreparedStatement stmt = null;
+	    String query = "select c.id, c.name, c.logopath, c.description, c.privatekey, c.publickey " +
+	                   "from charities c where c.id = ?";
+	    try {
+	        stmt = con.prepareStatement(query);
+	        stmt.setInt(1, iId);
+	        
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	        	
+	        	charity = new Charity();
+	        	charity.id = rs.getInt("id");
+	        	charity.name = rs.getString("name");
+	        	charity.description = rs.getString("description");
+	        	charity.logoPath = rs.getString("logopath");
+	        	charity.public_key = rs.getString("publickey");
+	        	charity.private_key = rs.getString("privatekey");
+	        	
+	        }
+	    } catch (SQLException e ) {
+	        System.err.println(e);
+	    } finally {
+	        if (stmt != null) { try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} }
+	    }
+	    
+	    retrieveCategoryForCharity(charity);
+	    
+	    return charity;
+		
 	}
 	
 	public static Vector<Charity> retrieveCharityByCategory(String iCategory){

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Vector;
 
 import mastercard.d1.db.SqliteDBConnect;
@@ -26,7 +27,7 @@ public class User {
 		Charity charity;
 	}
 	
-	Vector<Link> links;
+	HashMap<Integer, Link> links;
 	
 	public static User retrieveUser(String email){
 	
@@ -77,9 +78,9 @@ public class User {
 		
 	}
 	
-	public static Vector<Link> retrieveCharityListForUser(User user){
+	public static HashMap<Integer, Link> retrieveCharityListForUser(User user){
 		
-		Vector<Link> links = new Vector<Link>();
+		HashMap<Integer,Link> links = new HashMap<Integer,Link>();
 		Connection con = SqliteDBConnect.getUserConnection();
 		
 		PreparedStatement stmt = null;
@@ -98,7 +99,7 @@ public class User {
 	        	lnk.amount = rs.getFloat("amount");
 	        	lnk.oneclick = rs.getFloat("oneclick");
 	        	
-	        	links.add(lnk);
+	        	links.put(lnk.id_charity, lnk);
 	        }
 	    } catch (SQLException e ) {
 	        System.err.println(e);
@@ -117,9 +118,9 @@ public class User {
 		
 	}
 	
-	public static void retrieveCharityFromLinks(Vector<Link> links){
+	public static void retrieveCharityFromLinks(HashMap<Integer,Link> links){
 		
-		for (Link link:links){
+		for (Link link:links.values()){
 			retrieveCharityFromLink(link);
 		}
 		

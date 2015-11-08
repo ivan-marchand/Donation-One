@@ -19,6 +19,8 @@ import mastercard.d1.business.Charity;
 import mastercard.d1.business.Payment;
 import mastercard.d1.business.Result;
 import mastercard.d1.business.User;
+import mastercard.d1.places.Places;
+import mastercard.d1.places.Places.Address;
 
 import org.apache.log4j.Logger;
 
@@ -83,6 +85,14 @@ public class Services {
 		LOGGER.info("Search user by email:#"+iEmail+"#");
 		return new User[]{User.retrieveUser(iEmail)};
 	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/placesRetrieve")
+	public Vector<Address> placesRetrieve( @Context SecurityContext sc, @QueryParam("zipcode") String iZipCode) {
+		LOGGER.info("Place retrieve by zip code:#"+iZipCode+"#");
+		return Places.callPlaces(iZipCode);
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -105,6 +115,8 @@ public class Services {
 		}
 		
 	}
+	
+	
 	
 	
 }

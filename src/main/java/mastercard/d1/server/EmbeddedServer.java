@@ -125,8 +125,14 @@ public class EmbeddedServer {
 
 			DefaultServlet defaultServlet = new DefaultServlet();
 			ServletHolder holderPwd = new ServletHolder("default", defaultServlet);
-			holderPwd.setInitParameter("resourceBase",  workDirectory());
-
+			if (DATA_DIRECTORY!=null) {
+				LOGGER.debug("Forcing local static files");
+				File dir = new File(DATA_DIRECTORY);
+				holderPwd.setInitParameter("resourceBase",  dir.getAbsolutePath());
+			} else {
+				holderPwd.setInitParameter("resourceBase",  workDirectory());
+			}
+			
 			ctx.addServlet(holderPwd, "/*");
 			
 			
@@ -258,6 +264,10 @@ public class EmbeddedServer {
 		try {
 			CommandLine cmd = parser.parse( getOptions(), args);
 
+			if (cmd.hasOption("d")) {
+				DATA_DIRECTORY = cmd.getOptionValue("d");
+				LOGGER.debug("Setup debug directory");
+			}
 
 			try {
 

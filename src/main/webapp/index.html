@@ -37,7 +37,7 @@
 	<% list.forEach(function (chartity) { %>
 	<div class="col-sm-3">
 		<div class="thumbnail">
-			<img src="/ws<%= chartity.logoPath %>" height="200" width="200"></img>
+			<img src="<%= chartity.logoPath %>" height="200" width="200"></img>
 			<div class="caption">
 				<h4><%= truncate(chartity.name, 24) %></h4>
 				<%= truncate(chartity.description, 88) %>

@@ -29,7 +29,7 @@ public class SqliteDBConnect {
 	public static Connection getConnection(){
 		
 		final String localdir = System.getProperty("user.dir");
-		LOGGER.debug("Attaching server to DB file:"+localdir);
+		//LOGGER.debug("Attaching server to DB file:"+localdir);
 		
 		if (connection==null) {
 		    try
@@ -42,7 +42,6 @@ public class SqliteDBConnect {
 	
 		      statement.executeUpdate("create table if not exists categories (id INTEGER PRIMARY KEY, val string) ");
 		      statement.executeUpdate("create table if not exists charities (id INTEGER PRIMARY KEY, name string, logopath string, description string, privatekey string, publickey string)");
-		      statement.executeUpdate("create table if not exists charities_cat_lists (id_ch INTEGER, id_cat INTEGER)");
 		      
 		      statement.close();
 		      
@@ -62,6 +61,46 @@ public class SqliteDBConnect {
 		}
 	    
 	    return connection;
+		
+	}
+	
+	public static Connection userconnection;
+	
+	public static Connection getUserConnection(){
+		
+		final String localdir = System.getProperty("user.dir");
+		//LOGGER.debug("Attaching server to DB file:"+localdir);
+		
+		if (userconnection==null) {
+		    try
+		    {
+		      // create a database connection
+		      userconnection = DriverManager.getConnection("jdbc:sqlite:"+localdir+File.separator+".."+File.separator+"mastercard_user.sqlite");
+		      
+		      Statement statement = userconnection.createStatement();
+		      statement.setQueryTimeout(30);  // set timeout to 30 sec.
+	
+		      statement.executeUpdate("create table if not exists users (id INTEGER PRIMARY KEY, name string, email string, ccn string, expiry_month string, expiry_year string, cvc string, zipcode string) ");
+		      statement.executeUpdate("create table if not exists charitas (id_user INTEGER, id_ch INTEGER,  amount REAL, oneclick REAL)");
+		      
+		      statement.close();
+		      
+		      userconnection.commit();
+		      
+		    }
+		    catch(SQLException e)
+		    {
+		      // if the error message is "out of memory", 
+		      // it probably means no database file is found
+		      System.err.println(e.getMessage());
+		    }
+		    finally
+		    {
+		       
+		    }
+		}
+	    
+	    return userconnection;
 		
 	}
 	

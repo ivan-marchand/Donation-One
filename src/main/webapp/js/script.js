@@ -27,6 +27,7 @@ function DisplayCharityList(charityList, context) {
 
     // Register donate button
     $(".donate_button").on("click", function() {
+    	$("#modal_charity_name").html($(this).attr("charity_name"));
     	$("#payment_modal").modal();
     });
 };

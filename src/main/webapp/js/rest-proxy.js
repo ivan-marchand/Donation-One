@@ -17,4 +17,5 @@ function GetCharityList(callback, context) {
 			callback(data, context);
 		}
 	});
+
 };

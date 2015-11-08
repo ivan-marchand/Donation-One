@@ -9,12 +9,12 @@ import com.simplify.payments.exception.SystemException;
 
 public class Payment {
 
-	/*String name;
-	String logoPath;
-	Vector<String> categories;
-	String description;
-	String public_key;
-	String private_key;*/
+	Integer id;
+	String amount;
+	String cardNumber;
+	String cardExpiryMonth;
+	String cardExpiryYear;
+	String cardCvc;
 	
 	public static String processPayment(){
         

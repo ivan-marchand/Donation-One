@@ -14,8 +14,10 @@ function GetCategoryList(callback, context) {
 
 function GetCharityList(callback, context) {
 	$.ajax(SERVER_URL + URL_BASE + "/getCharityList", {
-		data: {category: context.category},
-		dataType: 'jsonp',
+		data : {
+			category : context.category
+		},
+		dataType : 'jsonp',
 		success : function(data) {
 			callback(data, context);
 		}
@@ -23,46 +25,53 @@ function GetCharityList(callback, context) {
 
 };
 
-function SearchCharity(callback, context) {
+function SearchCharity(callback, text, context) {
 	$.ajax(SERVER_URL + URL_BASE + "/searchCharity", {
-		data: {text: context.text},
-		dataType: 'jsonp',
+		data : {
+			text : text
+		},
+		dataType : 'jsonp',
 		success : function(data) {
 			callback(data, context);
 		}
 	});
-	
+
+};
+
+function RetrieveUser(callback, email, context) {
+	$.ajax(SERVER_URL + URL_BASE + "/retrieveUser", {
+		data : {
+			email : email
+		},
+		dataType : 'jsonp',
+		success : function(data) {
+			callback(data, context);
+		}
+	});
+
 };
 
 function ProcessPayment(data, context) {
 	$.ajax(SERVER_URL + URL_BASE + "/processPayment", {
-		type: "POST",
-		 headers: { 
-		        'Accept': 'application/json',
-		        'Content-Type': 'application/json' 
-		 	},
-		data: JSON.stringify(data),
-		dataType: 'json',
-		contentType: "application/json",
+		type : "POST",
+		headers : {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json'
+		},
+		data : JSON.stringify(data),
+		dataType : 'json',
+		contentType : "application/json",
 		success : function(data) {
 			$("#payment_modal").modal('hide');
 			if (data.result == "OK") {
-				$("#payment_result_modal_title").html("Success");
-				$("#payment_result_alert").removeClass("alert-warning").addClass("alert-success");
-				$("#payment_result_alert").html("Payment successfully processed");
+				DisplaySuccessDialog("Payment successfully processed");
 			} else {
-				$("#payment_result_modal_title").html("Failure");
-				$("#payment_result_alert").removeClass("alert-success").addClass("alert-warning");
-				$("#payment_result_alert").html("Unable to process payment");
+				DisplayFailureDialog("Unable to process payment");
 			}
-			$("#payment_result_modal").modal();
 		},
-		error: function() {
+		error : function() {
 			$("#payment_modal").modal('hide');
-			$("#payment_result_modal_title").html("Failure");
-			$("#payment_result_alert").removeClass("alert-success").addClass("alert-warning");
-			$("#payment_result_alert").html("Unable to process payment");
-			$("#payment_result_modal").modal();
+			DisplayFailureDialog("Unable to process payment");
 		}
 	});
 };

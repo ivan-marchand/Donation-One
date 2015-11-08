@@ -18,6 +18,7 @@ import mastercard.d1.business.Category;
 import mastercard.d1.business.Charity;
 import mastercard.d1.business.Payment;
 import mastercard.d1.business.Result;
+import mastercard.d1.business.User;
 
 import org.apache.log4j.Logger;
 
@@ -73,6 +74,14 @@ public class Services {
 	public Vector<Charity> getCharityById( @Context SecurityContext sc, @QueryParam("text") String iText) {
 		LOGGER.info("Search charity by text:"+iText);
 		return Charity.searchCharity(iText);
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/retrieveUser")
+	public User[] retrieveUser( @Context SecurityContext sc, @QueryParam("email") String iEmail) {
+		LOGGER.info("Search user by email:#"+iEmail+"#");
+		return new User[]{User.retrieveUser(iEmail)};
 	}
 
 	@POST

@@ -48,12 +48,14 @@ public class Services {
 		return Charity.retrieveCharityByCategoryAndZipcode(iCategory, iZipCode);
 	}
 	
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/processPayment")
-	public String processPayment( @Context SecurityContext sc ) {
+	public String processPayment( @Context SecurityContext sc, Payment iPayment) {
+		
 		LOGGER.info("Processing Payment ...");
-		return Payment.processPayment();
+		return Payment.processPayment(iPayment);
 	}
 
 	@GET

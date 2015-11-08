@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -56,6 +57,15 @@ public class OneClickActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final JSONObject result) {
+            try {
+                if (result.has("result") && result.getString("result").equals("OK")) {
+                    Toast.makeText(getBaseContext(), "Payment Successful!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getBaseContext(), "Payment Failed!", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                Toast.makeText(getBaseContext(), "Payment Failed!", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

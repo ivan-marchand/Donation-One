@@ -61,7 +61,7 @@ function RetrieveUser(callback, email, context) {
 };
 
 function GetTrxList(callback, context) {
-	$.ajax(SERVER_URL + URL_BASE + "/getTrxList", {
+	$.ajax(SERVER_URL + URL_BASE + "/getTransactionList", {
 		dataType : 'jsonp',
 		success : function(data) {
 			callback(data, context);

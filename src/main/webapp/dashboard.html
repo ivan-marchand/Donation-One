@@ -28,10 +28,10 @@
 	</tr>
 	<% list.forEach(function (trx) { %>
 	<tr>
-		<td><h1><%= trx.timestamp %></h1></td>
-		<td><h1><%= trx.user %></h1></td>
+		<td><h1><%= trx.dateTime %></h1></td>
+		<td><h1><%= trx.userName %></h1></td>
 		<td><h1><%= trx.amount %>$</h1></td>
-		<td><h1><%= trx.charity %></h1></td>
+		<td><h1><%= trx.charityName %></h1></td>
 	</tr>
 	<% }); %>
 </script>

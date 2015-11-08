@@ -4,10 +4,6 @@ var $user = {};
 
 // Truncate long text
 function truncate(text, maxTextSize) {
-	$(".expand_text").on("click", function() {
-		$(this).parent().find(".extra_text").show();
-		$(this).hide();
-	});
 	if (text.length > maxTextSize) {
 		return $("<div/>").html("<p>" + text.substring(0, maxTextSize)  + "<a href=\"javascript:void(0)\" class=\"expand_text\">....</a><span class=\"extra_text\" hidden>" + text.substring(maxTextSize) + "</span></p>").html();
 	} else {
@@ -43,6 +39,10 @@ function UpdateCharityListDisplay(category, display_full_list) {
 			$charityListToDisplay = $charityMap[category].slice($colNb * 3, $colNb * 3 + 3);
 		}
 	}
+	$(".expand_text").on("click", function() {
+		$(this).parent().find(".extra_text").show();
+		$(this).hide();
+	});
 }
 
 function DisplayCharityList(charityList, context) {

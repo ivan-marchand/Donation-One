@@ -17,6 +17,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import mastercard.d1.business.Category;
 import mastercard.d1.business.Charity;
+import mastercard.d1.business.Payment;
 
 import org.apache.log4j.Logger;
 
@@ -50,12 +51,20 @@ public class Services {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/processPayment")
+	public String processPayment( @Context SecurityContext sc ) {
+		LOGGER.info("Processing Payment ...");
+		return Payment.processPayment();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getCharityById")
 	public Charity getCharityById( @Context SecurityContext sc, @QueryParam("id") Integer iId) {
 		LOGGER.info("Request charity by id:"+iId);
 		return Charity.retrieveCharityById(iId);
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

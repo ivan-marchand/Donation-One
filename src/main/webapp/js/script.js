@@ -1,5 +1,6 @@
 var $categoryDisplayOrder = ["Children", "Hunger", "Worldwide", "Veteran"];
 var $charityMap = {};
+var $user = {};
 
 // Truncate long text
 function truncate(text, maxTextSize) {
@@ -88,7 +89,45 @@ function DisplaySearchResult(data) {
 	$charityMap["Search Result"] = data;
 	$("#charity_list").empty();
 	UpdateCharityListDisplay("Search Result", true);
+
+    // Register donate button
+    $(".donate_button").on("click", function() {
+    	$("#modal_charity_name").html($(this).attr("charity_name"));
+    	$("#payment_button").attr("charity_id", $(this).attr("charity_id"));
+    	$("#payment_modal").modal();
+    });
 }
+
+// Display success/failure dialog
+function DisplaySuccessDialog(alert) {
+	$("#dialog_modal_title").html("Success");
+	$("#dialog_alert").removeClass("alert-warning").addClass("alert-success");
+	$("#dialog_alert").html(alert);
+	$("#dialog_modal").modal();
+}
+function DisplayFailureDialog(alert) {
+	$("#dialog_modal_title").html("Failure");
+	$("#dialog_alert").removeClass("alert-success").addClass("alert-warning");
+	$("#dialog_alert").html(alert);
+	$("#dialog_modal").modal();
+}
+
+// Login user
+function Login(data) {
+	// Logged In?
+	if (data.length && data.length > 0 && data[0] != null) {
+		$user = data[0];
+		// Display user name in navbar
+		$("#logged_in").show();
+		$("#logged_out").hide();
+		$("#user_name").html($user.name);
+		$.cookie("email", $user.email);
+	} else {
+		DisplayFailureDialog("Login failed, please try again");
+	}
+	// Hide login modal
+	$("#login_modal").modal('hide');
+};
 
 $(function() {
 	
@@ -101,13 +140,35 @@ $(function() {
     	DisplayFullCharityList();
     });
     
+    // Login
+    $("#login").on("click", function() {
+    	$("#login_modal").modal();
+    });
+    $("#login_button").on("click", function() {
+    	RetrieveUser(Login, $("#email_address").val(), {});
+    });
+    // Already logged in ?
+    if ($.cookie("email") && _.isEmpty($user)) {
+    	RetrieveUser(Login, $("#email_address").val(), {});
+    }
+    
+    // Logout
+    $("#logout").on("click", function() {
+    	// Hide user name
+    	$("#logged_in").hide();
+    	$("#logged_out").show();
+    	$.removeCookie("email");
+    	$user = {};
+    });
+
     // Search
+    $("#charity_search").val("");
     $("#charity_search_button").on("click", function() {
-    	SearchCharity(DisplaySearchResult, {text: $("#charity_search").val()});
+    	SearchCharity(DisplaySearchResult, $("#charity_search").val(), {});
     });
     $("#charity_search").on("keydown", function(e) {
     	if(e.which == 13) {
-    		SearchCharity(DisplaySearchResult, {text: $("#charity_search").val()});
+    		SearchCharity(DisplaySearchResult, $("#charity_search").val(), {});
     	}
     });
     

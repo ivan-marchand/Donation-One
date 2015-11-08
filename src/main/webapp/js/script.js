@@ -68,6 +68,7 @@ function DisplayCharityList(charityList, context) {
     // Register donate button
     $(".donate_button").on("click", function() {
     	$("#modal_charity_name").html($(this).attr("charity_name"));
+    	$("#payment_button").attr("charity_id", $(this).attr("charity_id"));
     	$("#payment_modal").modal();
     });
 };
@@ -89,5 +90,19 @@ $(function() {
     DisplayFullCharityList();
     $(".navbar-brand").on("click", function() {
     	DisplayFullCharityList();
+    });
+    
+    // Payment
+    $("#payment_button").on("click", function() {
+    	data = {
+    	id: $(this).attr("charity_id"),
+        amount: $("#donation_amount").val(),
+        cardNumber: $("#ccn").val(),
+        cardExpiryMonth: $("#exp_month").val(),
+        cardExpiryYear: $("#exp_year").val(),
+        cardCvc: $("#cvc").val()
+    	};
+    	console.log(data);
+    	ProcessPayment(data, {});
     });
 });

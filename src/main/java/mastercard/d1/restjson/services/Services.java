@@ -48,6 +48,14 @@ public class Services {
 		return Charity.retrieveCharityByCategoryAndZipcode(iCategory, iZipCode);
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getCharityById")
+	public Charity getCharityById( @Context SecurityContext sc, @QueryParam("id") Integer iId) {
+		LOGGER.info("Request charity by id:"+iId);
+		return Charity.retrieveCharityById(iId);
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

@@ -65,6 +65,15 @@ public class Services {
 		LOGGER.info("Request charity by id:"+iId);
 		return Charity.retrieveCharityById(iId);
 	}
+	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/searchCharity")
+	public Vector<Charity> getCharityById( @Context SecurityContext sc, @QueryParam("text") String iText) {
+		LOGGER.info("Search charity by text:"+iText);
+		return Charity.searchCharity(iText);
+	}
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

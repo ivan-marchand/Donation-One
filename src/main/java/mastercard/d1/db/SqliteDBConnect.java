@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 public class SqliteDBConnect {
 
-	protected static final Logger LOGGER = Logger.getLogger(Services.class.getName());
+	protected static final Logger LOGGER = Logger.getLogger(SqliteDBConnect.class.getName());
 	
 	static {
 		try {

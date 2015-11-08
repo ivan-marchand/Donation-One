@@ -11,7 +11,7 @@ import mastercard.d1.db.SqliteDBConnect;
 
 public class Charity {
 
-	Integer id;
+	public Integer id;
 	String name;
 	String logoPath;
 	Vector<String> categories;

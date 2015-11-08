@@ -64,11 +64,11 @@ public class Charity {
 		
 		PreparedStatement stmt = null;
 	    String query = "select c.id, c.name, c.logopath, c.description, c.privatekey, c.publickey " +
-	                   "from charities c where lower(c.description) like ? and lower(c.name) like ?";
+	                   "from charities c where lower(c.description) like ? or lower(c.name) like ?";
 	    try {
 	        stmt = con.prepareStatement(query);
-	        stmt.setString(1, "%"+iWord+"%");
-	        stmt.setString(2, "%"+iWord+"%");
+	        stmt.setString(1, "%"+iWord.toLowerCase()+"%");
+	        stmt.setString(2, "%"+iWord.toLowerCase()+"%");
 	        
 	        ResultSet rs = stmt.executeQuery();
 	        while (rs.next()) {

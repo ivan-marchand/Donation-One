@@ -97,9 +97,9 @@ public class Services {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/oneClickPayment")
-	public Result oneClickPayment( @Context SecurityContext sc, @QueryParam("email") String iEmail) {
+	public Result oneClickPayment( @Context SecurityContext sc, @QueryParam("email") String iEmail, @QueryParam("amount") String iAmount) {
 		LOGGER.info("One Click Payment for user "+iEmail+" ...");
-		return Payment.oneClickPayment(iEmail);
+		return Payment.oneClickPayment(iEmail, iAmount);
 	}
 	
 	@POST

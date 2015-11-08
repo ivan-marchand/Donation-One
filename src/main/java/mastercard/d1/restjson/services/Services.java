@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,6 +17,7 @@ import javax.ws.rs.core.SecurityContext;
 import mastercard.d1.business.Category;
 import mastercard.d1.business.Charity;
 import mastercard.d1.business.Payment;
+import mastercard.d1.business.Result;
 
 import org.apache.log4j.Logger;
 
@@ -51,10 +51,11 @@ public class Services {
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/processPayment")
-	public String processPayment( @Context SecurityContext sc ) {
+	public Result processPayment( @Context SecurityContext sc, Payment iPayment) {
 		LOGGER.info("Processing Payment ...");
-		return Payment.processPayment();
+		return Payment.processPayment(iPayment);
 	}
 
 	@GET

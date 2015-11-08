@@ -87,7 +87,7 @@ public class User {
 		
 		PreparedStatement stmt = null;
 	    String query = "select id, name, email, ccn , expiry_month , expiry_year , cvc, zipcode  " +
-	                   "from users where email = ?";
+	                   "from users where id = ?";
 	    try {
 	        stmt = con.prepareStatement(query);
 	        stmt.setInt(1, id);

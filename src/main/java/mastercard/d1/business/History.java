@@ -74,10 +74,10 @@ public class History {
         		Charity aCharity = Charity.retrieveCharityById(aHistory.id_ch);
         		aHistory.charityName = aCharity.name;
         		
-        		if (aHistory.id_ch == -1)
+        		if (aHistory.id_user == -1)
         			aHistory.userName = "Anonymous";
         		else {
-        			User aUser = User.retrieveUser(aHistory.id_ch);
+        			User aUser = User.retrieveUser(aHistory.id_user);
             		aHistory.userName = aUser.name;
         		}
         		

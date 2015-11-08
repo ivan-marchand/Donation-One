@@ -49,7 +49,7 @@ public class Services {
 		return Charity.retrieveCharityByCategoryAndZipcode(iCategory, iZipCode);
 	}
 	
-	@GET
+	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/processPayment")
 	public String processPayment( @Context SecurityContext sc ) {

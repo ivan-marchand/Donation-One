@@ -82,7 +82,16 @@ function DisplayFullCharityList() {
     }
 }
 
+// Display search result
+function DisplaySearchResult(data) {
+	$charityMap = {};
+	$charityMap["Search Result"] = data;
+	$("#charity_list").empty();
+	UpdateCharityListDisplay("Search Result", true);
+}
+
 $(function() {
+	
 	// Category List side bar
     GetCategoryList(DisplayCattegoryList, {});
 
@@ -90,6 +99,16 @@ $(function() {
     DisplayFullCharityList();
     $(".navbar-brand").on("click", function() {
     	DisplayFullCharityList();
+    });
+    
+    // Search
+    $("#charity_search_button").on("click", function() {
+    	SearchCharity(DisplaySearchResult, {text: $("#charity_search").val()});
+    });
+    $("#charity_search").on("keydown", function(e) {
+    	if(e.which == 13) {
+    		SearchCharity(DisplaySearchResult, {text: $("#charity_search").val()});
+    	}
     });
     
     // Payment
@@ -102,7 +121,14 @@ $(function() {
         cardExpiryYear: $("#exp_year").val(),
         cardCvc: $("#cvc").val()
     	};
-    	console.log(data);
     	ProcessPayment(data, {});
     });
+    
+    // Avoid submit when enter is hit
+    $(window).keydown(function(event){
+        if(event.keyCode == 13) {
+          event.preventDefault();
+          return false;
+        }
+      });
 });

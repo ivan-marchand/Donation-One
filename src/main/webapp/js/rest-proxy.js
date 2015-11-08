@@ -1,6 +1,6 @@
 //var URL_BASE = "ws/api/v1";
 //var SERVER_URL = "http://localhost:10110/";
-var URL_BASE = "api/v1";
+var URL_BASE = "ws/api/v1";
 var SERVER_URL = "";
 
 function GetCategoryList(callback, context) {
@@ -21,6 +21,17 @@ function GetCharityList(callback, context) {
 		}
 	});
 
+};
+
+function SearchCharity(callback, context) {
+	$.ajax(SERVER_URL + URL_BASE + "/searchCharity", {
+		data: {text: context.text},
+		dataType: 'jsonp',
+		success : function(data) {
+			callback(data, context);
+		}
+	});
+	
 };
 
 function ProcessPayment(data, context) {

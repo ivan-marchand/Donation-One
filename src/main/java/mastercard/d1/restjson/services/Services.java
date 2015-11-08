@@ -94,6 +94,14 @@ public class Services {
 		return Places.callPlaces(iZipCode);
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/oneClickPayment")
+	public Result oneClickPayment( @Context SecurityContext sc, @QueryParam("email") String iEmail) {
+		LOGGER.info("One Click Payment for user "+iEmail+" ...");
+		return Payment.oneClickPayment(iEmail);
+	}
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

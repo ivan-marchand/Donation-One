@@ -64,4 +64,24 @@ public class Payment {
 
 	}
     
+	public static Result oneClickPayment(String iEmail){
+
+		Result aResult = new Result();
+		aResult.result = "KO";
+		
+		User aUser = User.retrieveUser(iEmail);
+        
+		Payment aPayment = new Payment();
+		aPayment.cardNumber = aUser.ccn;
+		aPayment.cardExpiryMonth = aUser.expiry_month;
+		aPayment.cardExpiryYear = aUser.expiry_year;
+		aPayment.cardCvc = aUser.cvc;
+        
+		//Get only first charity
+		aPayment.id = String.valueOf(aUser.links.entrySet().iterator().next().getValue().id_charity);
+		aPayment.amount = String.valueOf(aUser.links.entrySet().iterator().next().getValue().oneclick);
+        
+		return processPayment(aPayment);
+
+	}
 }

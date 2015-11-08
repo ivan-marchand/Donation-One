@@ -56,6 +56,62 @@ public class Charity {
 	    return charities;
 	}
 	
+	public static Vector<Charity> searchCharityByWord(String iWord){
+		
+		Vector<Charity> charities = new Vector<Charity>();
+		
+		Connection con = SqliteDBConnect.getConnection();
+		
+		PreparedStatement stmt = null;
+	    String query = "select c.id, c.name, c.logopath, c.description, c.privatekey, c.publickey " +
+	                   "from charities c where lower(c.description) like ? and lower(c.name) like ?";
+	    try {
+	        stmt = con.prepareStatement(query);
+	        stmt.setString(1, "%"+iWord+"%");
+	        stmt.setString(2, "%"+iWord+"%");
+	        
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	        	
+	        	Charity charity = new Charity();
+	        	charity.id = rs.getInt("id");
+	        	charity.name = rs.getString("name");
+	        	charity.description = rs.getString("description");
+	        	charity.logoPath = rs.getString("logopath");
+	        	charity.public_key = rs.getString("publickey");
+	        	charity.private_key = rs.getString("privatekey");
+	        	
+	        	charities.add(charity);
+	        	
+	        }
+	    } catch (SQLException e ) {
+	        System.err.println(e);
+	    } finally {
+	        if (stmt != null) { try {
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} }
+	    }
+	    
+	    return charities;
+		
+	}
+	
+	public static Vector<Charity> searchCharity(String iText){
+		
+		Vector<Charity> charities = new Vector<Charity>();
+		
+		String[] words = iText.split(" ");
+		
+		for (String word:words) {
+			charities.addAll(searchCharityByWord(word));
+		}
+		
+		return charities;
+	}
+	
 	public static Charity retrieveCharityById(Integer iId){
 		
 		Charity charity = null;
